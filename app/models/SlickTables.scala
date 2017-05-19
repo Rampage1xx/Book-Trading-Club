@@ -1,15 +1,14 @@
-import slick.driver.MySQLDriver.api._
+package models
+import slick.jdbc.MySQLProfile.api._
 import java.sql.Timestamp
-
-import slick.profile.SqlProfile.ColumnOption.SqlType
-
-
-val db = Database.forConfig("db")
+import java.util.UUID
+import controllers.Application
+import slick.sql.SqlProfile.ColumnOption.SqlType
 
 
 
-class Users(tag: Tag) extends Table[(Int, String, String, Timestamp, Timestamp)](tag, "USERS") {
-  def id: Rep[Int] = column[Int]("ID", O.PrimaryKey, SqlType("UUID"))
+class Users(tag: Tag) extends Table[(UUID, String, String, Timestamp, Timestamp)](tag, "USERS") {
+  def id: Rep[UUID] = column[UUID]("USER_ID", O.PrimaryKey, SqlType("VARCHAR"))
 
   def name: Rep[String] = column[String]("USER_NAME")
 
@@ -23,14 +22,27 @@ class Users(tag: Tag) extends Table[(Int, String, String, Timestamp, Timestamp)]
 }
 
 
-class Books(tag:Tag) extends Table [(Int, String, String)](tag, "BOOKS") {
-  def id: Rep[Int] = column[Int]("ID", O.PrimaryKey, SqlType("UUID"))
+class Books(tag:Tag) extends Table [(UUID, UUID, String, String)](tag, "BOOKS") {
+  def userID: Rep[UUID] = column[UUID]("USER_ID")
+
+  def id: Rep[UUID] = column[UUID]("ID", O.PrimaryKey, SqlType("VARCHAR"))
 
   def title: Rep[String] =  column[String]("BOOK_TITLE")
 
   def description: Rep[String] = column[String]("BOOK_DESCRIPTION")
 
+  def owner = foreignKey("USER_FK", userID, TableQuery[Users])(_.id)
 
 
-  def * = (id, title, description)
+  def * = (userID, id, title, description)
 }
+
+class TablesList extends Application {
+  val db: Any = Database.forConfig("db")
+  val users: Any = TableQuery[Users]
+  val books: Any = TableQuery[Books]
+
+
+}
+
+

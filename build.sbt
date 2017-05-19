@@ -6,13 +6,16 @@ lazy val `playscala` = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.7"
 
-libraryDependencies ++= Seq( jdbc , cache , ws   , specs2 % Test  , "org.sangria-graphql" %% "sangria" % "1.2.0" )
-
 libraryDependencies ++= Seq(
-  "com.typesafe.slick" %% "slick" % "3.0.0",
-  "org.slf4j" % "slf4j-nop" % "1.6.4"
+  cache, ws, specs2 % Test,
+  "com.typesafe.slick" %% "slick" % "3.2.0",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.0",
+  "postgresql" % "postgresql" % "9.1-901.jdbc4"
 )
 
-unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
+
+
+
+unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
