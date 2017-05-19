@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+
+
+#  play:
+#    image: ingensi/play-framework:latest
+#    volumes:
+#     - ./app:/app:rw
+#    ports:
+#     - "80:9000"
+#    networks:
+#     - play-network
+
+  postgres:
+      build:
+        context: .
+        dockerfile: postgres.dockerfile
+      environment:
+        POSTGRES_USER: root
+        POSTGRES_PASSWORD: MyNewPass
+        POSTGRES_DB: root
+        DB_USER: meeseeks
+        DB_PASS: MEESEEKS
+        DB_NAME: pinit
+        DB_NAME2: test
+      networks:
+       - play-network
+
+
+networks:
+  play-network:
+    driver: bridge
+
+
